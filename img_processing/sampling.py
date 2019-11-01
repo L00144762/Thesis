@@ -10,3 +10,5 @@
 # convert to grayscale
 # resize
 # make sure there's no people in them
+
+# this is richard on thesis py from home
