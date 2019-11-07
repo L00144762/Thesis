@@ -7,8 +7,8 @@ from sklearn.utils import shuffle
 import numpy as np
 import pandas as pd
 
-#path = 'C:/Users/Richard/Desktop/dissertation/test'
-path = 'C:/Users/rcurran.GARTANTECH/Desktop/Aten/test'
+path = 'C:/Users/Richard/Desktop/dissertation/test'
+#path = 'C:/Users/rcurran.GARTANTECH/Desktop/Aten/test'
 
 # list of folders in image directory animals
 image_folders = [f for f in listdir(path) if isdir(join(path, f))]
@@ -65,8 +65,10 @@ x = []
 ## shuffling the images and labels
 ## so they are not in the same order as in root directory#
 # reduces bias
-images, labels = shuffle(images, labels,  random_state = 1232434)
+images, labels = shuffle(images, labels)
+
 #print(images,labels)
 
 #print(images.shape)
 # print(labels.shape)
+
