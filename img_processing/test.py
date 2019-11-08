@@ -1,10 +1,10 @@
 import shutil
-#import cv2
+import cv2
 import os,glob
 from os import listdir,makedirs
 from os.path import isfile,join,isdir
-#from sklearn.utils import shuffle
-#import numpy as np
+from sklearn.utils import shuffle
+import numpy as np
 
 # from skimage import io, transform
 # import numpy as np # linear algebra
@@ -39,55 +39,79 @@ from os.path import isfile,join,isdir
 # # # gray('cow')
 
 
-#path = 'C:/Users/Richard/Desktop/dissertation/test'
-path = 'C:/Users/rcurran.GARTANTECH/Desktop/Aten/test'
+path = 'C:/Users/Richard/Desktop/dissertation/test'
 #destpath = ('C:/Users/Richard/Desktop/dissertation/images_gray/{}'.format(a))
 
 image_folders = [f for f in listdir(path) if isdir(join(path, f))]  # list of folders in image directory animals
 
 # creates a dictionary of image folder names and assigns a label to each folder
-dict = {image_folders[i]: i for i in range(0,len(image_folders))}
-#print(type(image_labels))
-# print(image_labels)
+image_labels = {image_folders[i]: i for i in range(0,len(image_folders))}
+#print(image_labels)
+#print(image_labels)
 #
-# for folder in listdir(path):
-#     print(folder)
-# print('\n')
-# for folder in listdir(path):
-#     print(image_labels[folder])
-print('\n')
+def load_data(directory):
+    images = []
+    labels = []
+    file_names = []
+    for folder in listdir(directory):
+        for file in listdir(directory + "/" + folder):
+            img_path = directory + "/" + folder + "/" + file
+            curr_img = cv2.imread(img_path)
+            curr_img = cv2.resize(curr_img, (150,150))
+            curr_img = cv2.cvtColor(curr_img, cv2.COLOR_BGR2GRAY)
 
-    #print(dict[e])
+            images.append(curr_img)
+
+            labels.append(image_labels[folder])
+            file_names.append(file)
+    images, labels, file_names = shuffle(images, labels, file_names, random_state=817328462)
+    print(images,labels)### Shuffle the data !!!
+    images = np.array(images, dtype = 'float32') ### image matrices held as floats
+    labels = np.array(labels, dtype = 'int32')   ### corresponding labels held as integers
+
+    return images, labels, file_names
+images, labels, file_names = load_data(path)
+
+x_data = images
+y_data = labels
+print(x_data.shape)
+print(y_data.shape)
+## path to the images
 
 
-#print(image_lab_els)
+def load_data(directory):
+    images = []
+    labels = []
+    for folder in listdir(directory):
+        for file in listdir(directory + "/" + folder):
+            img_path = directory + "/" + folder + "/" + file
+            #resizing and grayscaling
+            # may change later
+            curr_img = cv2.imread(img_path)
+            curr_img = cv2.resize(curr_img, (224,224))
+            curr_img = cv2.cvtColor(curr_img, cv2.COLOR_BGR2GRAY)
+
+            load_data.images = images.append(curr_img)
+
+            load_data.labels = labels.append(image_labels[folder])
+
+load_data(path)
+
+
 #
-# def load_data(directory):
-#     output = []
-#     images = []
-#     labels = []
-#     file_names = []
-#     for folder in listdir(directory):
-#         curr_label = image_labels[folder] # find the value assigned to each key of dictionary; keys are folder names and values are corresponding label
-#         print(curr_label)
-#     #     for file in listdir(directory + "/" + folder):
-    #         img_path = directory + "/" + folder + "/" + file
-    #         curr_img = cv2.resize(curr_img, (150,150))
-    #         curr_img = cv2.cvtColor(curr_img, cv2.COLOR_BGR2GRAY)
-
-    #         curr_img = cv2.imread(img_path)
-    #
-    #         images.append(curr_img)
-    #         labels.append(curr_label)
-    #         file_names.append(file)
-    # images, labels, file_names = shuffle(images, labels, file_names, random_state=817328462)
-    # print(images,labels)### Shuffle the data !!!
-    # images = np.array(images, dtype = 'float32') ### image matrices held as floats
-    # labels = np.array(labels, dtype = 'int32')   ### corresponding labels held as integers
-
+#     images.append(curr_img)
+#
+#     labels.append(image_labels[folder])
+#     file_names.append(file)
+#     images, labels, file_names = shuffle(images, labels, file_names, random_state=817328462)
+#     print(images,labels)### Shuffle the data !!!
+#     images = np.array(images, dtype = 'float32') ### image matrices held as floats
+#     labels = np.array(labels, dtype = 'int32')   ### corresponding labels held as integers
+#
 #     return images, labels, file_names
 # images, labels, file_names = load_data(path)
-#
+
+
 
 
 # x_d = images
