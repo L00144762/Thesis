@@ -68,8 +68,8 @@ trainX, testX, trainY, testY = train_test_split(data, labels, test_size= 0.25, r
 lb = LabelBinarizer()
 trainY = lb.fit_transform(trainY)
 testY = lb.transform(testY)
-
-print(trainY[3])
+print(trainY.shape)
+print(testY.shape)
 
 
 # define neural network using keras
