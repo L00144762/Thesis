@@ -10,6 +10,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from tqdm import tqdm as tqdm
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelBinarizer
+
 import time
 import tensorflow as tf
 #
@@ -46,29 +48,24 @@ def im_proc_data():
 
     images = []
     labels = []
-    # ecoder = 0
 
     for folder in listdir(path):
+        files.append(folder)
         for jpeg in listdir(path + "/" + folder):
             if jpeg.endswith("jpeg") or jpeg.endswith("jpg") or jpeg.endswith("PNG"):
                 jpeg = path + "/" + folder + "/" + jpeg
                 jpeg = cv2.imread(jpeg, 0)
-                jpeg = cv2.resize(jpeg, (100, 100))
+                jpeg = cv2.resize(jpeg, (32, 32))
                 #jpeg = cv2.GaussianBlur(jpeg, (5,5), 0)
                 #jpeg = cv2.cvtColor(jpeg, cv2.COLOR_BGR2GRAY)
                 images.append(jpeg)
-                labels.append(image_labels[folder]) # assining label to each class
+                labels.append(image_labels[folder]) # assigning label to each class
 
-        #labels.append(ecoder) #1-hot endoder: assigning numerical labels to each class
 
-    #ecoder = ecoder + 1
 
-          # assings a unique label to each folder(that's why it's outside the if loop
-    images, labels = shuffle(images, labels, random_state = 12551) # random state initially: for testing the image processing
-                                                             # will remove when training begins to ensure
-                                                             # the data is reshuffled each time and reduce
-                                                              #  bias in learning
+    images, labels = shuffle(images, labels, random_state = 12551)
     return(images, labels)
+
 images, labels = im_proc_data()
 
 
@@ -84,7 +81,12 @@ for i in range(9):
 #plt.show()
 
 images = np.array(images, dtype = 'float32')
+
+#normalizing the images
+images = images/255.0
 labels = np.array(labels, dtype = 'int32')
+np.save('images', images)
+np.save('labels', labels)
 print(images.shape)
 print(labels.shape)
 
@@ -109,6 +111,11 @@ print(label_val.shape)
 print('test shape: \n')
 print(img_test.shape)
 print(label_test.shape)
+
+np.savez('images.npz', train_img = img_train, val_img = img_val, test_img = img_test)
+np.savez('labels.npz', train_label = label_train, val_label = label_val, test_label = label_test)
+
+
 
 
 # normalise the image data to take a value of between 0 and 1; makes computation easier
