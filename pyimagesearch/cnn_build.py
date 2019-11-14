@@ -1,7 +1,7 @@
-# USAGE
-# python train_vgg.py --dataset animals --model output/smallvggnet.model --label-bin output/smallvggnet_lb.pickle --plot output/smallvggnet_plot.png
-
-# set the matplotlib backend so figures can be saved in the background
+# CNN build version 1.0
+# SGD optimizer with LR of 0.01 and step-decay = (training set length / epochs)
+# keeping it as computationally simple as possible at each convolution layer
+#
 
 # import the necessary packages
 from keras.models import Sequential
@@ -15,9 +15,9 @@ from keras.layers.core import Dense
 from keras import backend as K
 
 class CNN_NET:
-    def build(w, h, d):
+    def build(w, h, d ,cls):
         model = Sequential()
-        inputShape = (w, h, d)
+        inputShape = (w, h, d) # no dimension value: grayscale image. will add when colour images are used
 
         #32 filters of 3*3
         model.add(Conv2D(32, (3,3), padding= "same",
@@ -42,8 +42,8 @@ class CNN_NET:
         model.add(MaxPooling2D(pool_size=(2,2)))
         model.add(Dropout(0.25))
 
-        model.add(Conv2D(128, (3,3), padding= "same"))
-        model.add(Activation("relu"))
+        model.add(Conv2D(128, (3,3), padding= "same")) ## [EDIT] maybe remove a layer to reduce training time?
+        model.add(Activation("relu"))                   # might reduce accuracy, hopefully not too much
         model.add(BatchNormalization(axis = -1))
         model.add(Conv2D(128, (3,3), padding= "same"))
         model.add(Activation("relu"))
@@ -63,7 +63,7 @@ class CNN_NET:
 
         # softmax classifier
         # this does the classification
-        model.add(Dense(3))
+        model.add(Dense(cls))
         model.add(Activation("softmax"))
 
 
