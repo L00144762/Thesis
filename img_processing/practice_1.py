@@ -132,5 +132,9 @@ from os.path import isfile,join,isdir
 #
 # print(x)
 # print(x.argmax(axis = 0)[1])
-
-
+c = 0
+c = c + 1
+c = 1
+for i in range(10):
+    c = c +i
+    print(c)

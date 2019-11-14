@@ -70,7 +70,3 @@ class CNN_NET:
 
         # return the constructed network architecure
         return model
-
-
-
-
