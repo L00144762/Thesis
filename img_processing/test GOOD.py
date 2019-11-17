@@ -15,8 +15,8 @@ from sklearn.preprocessing import LabelBinarizer
 import time
 import tensorflow as tf
 #
-path = 'C:/Users/rcurran.GARTANTECH/Desktop/Aten/animals'
-#path = 'C:/Users/Richard/Desktop/dissertation/test'
+#path = 'C:/Users/rcurran.GARTANTECH/Desktop/Aten/animals'
+path = 'C:/Users/Richard/Desktop/dissertation/test'
 # # list of folders in image directory animals
 image_folders = [f for f in listdir(path) if isdir(join(path, f))]
 print(image_folders)
@@ -48,6 +48,7 @@ def im_proc_data():
 
     images = []
     labels = []
+    files = []
 
     for folder in listdir(path):
         files.append(folder)
@@ -67,69 +68,71 @@ def im_proc_data():
     return(images, labels)
 
 images, labels = im_proc_data()
-
-
-# sample of the images and their label
-plt.figure(figsize=(10,10))
-for i in range(9):
-    plt.subplot(3,3, i + 1)
-    plt.xticks([])
-    plt.yticks([])
-    plt.grid(False)
-    plt.imshow(images[i])
-    plt.xlabel(image_folders[labels[i]])
-#plt.show()
-
-images = np.array(images, dtype = 'float32')
-
-#normalizing the images
-images = images/255.0
-labels = np.array(labels, dtype = 'int32')
-np.save('images', images)
-np.save('labels', labels)
+images = np.array(images, dtype='float')
 print(images.shape)
-print(labels.shape)
 
-#reshaping the label array as a 1D array so it's compatable with model
-labels = labels.reshape(-1,1)
-print(labels)
-print(labels.shape)
-
-## splitting the images and labels into train, validation and test sets
-
-# train = 75%, Validation = 15%, test = 10%
-img_train, img_test, label_train, label_test = train_test_split(images, labels, test_size=.25)
-
-img_val, img_test, label_val, label_test = train_test_split(img_test, label_test, test_size=.4)
-
-print('Traing shape :\n')
-print(img_train.shape)
-print(label_train.shape)
-print('validation shape: \n')
-print(img_val.shape)
-print(label_val.shape)
-print('test shape: \n')
-print(img_test.shape)
-print(label_test.shape)
-
-np.savez('images.npz', train_img = img_train, val_img = img_val, test_img = img_test)
-np.savez('labels.npz', train_label = label_train, val_label = label_val, test_label = label_test)
-
-
-
-
-# normalise the image data to take a value of between 0 and 1; makes computation easier
-
-img_train, img_val, img_test = img_train/255.0, img_val/255.0, img_test/255.0
-
-print(img_train[67], img_val[67], img_test[67])
-
-#example of an images and their labels
-# f, axarr = plt.subplots(2,2)
-# axarr[0,0].imshow(images[45])
-# axarr[0,0].set_title(labels[45])
-# axarr[0,1].imshow(images[270])
-# axarr[0,1].set_title(labels[270])
+#
+# # sample of the images and their label
+# plt.figure(figsize=(10,10))
+# for i in range(9):
+#     plt.subplot(3,3, i + 1)
+#     plt.xticks([])
+#     plt.yticks([])
+#     plt.grid(False)
+#     plt.imshow(images[i])
+#     plt.xlabel(image_folders[labels[i]])
+# #plt.show()
+#
+# images = np.array(images, dtype = 'float32')
+#
+# #normalizing the images
+# images = images/255.0
+# labels = np.array(labels, dtype = 'int32')
+# np.save('images', images)
+# np.save('labels', labels)
+# print(images.shape)
+# print(labels.shape)
+#
+# #reshaping the label array as a 1D array so it's compatable with model
+# labels = labels.reshape(-1,1)
+# print(labels)
+# print(labels.shape)
+#
+# ## splitting the images and labels into train, validation and test sets
+#
+# # train = 75%, Validation = 15%, test = 10%
+# img_train, img_test, label_train, label_test = train_test_split(images, labels, test_size=.25)
+#
+# img_val, img_test, label_val, label_test = train_test_split(img_test, label_test, test_size=.4)
+#
+# print('Traing shape :\n')
+# print(img_train.shape)
+# print(label_train.shape)
+# print('validation shape: \n')
+# print(img_val.shape)
+# print(label_val.shape)
+# print('test shape: \n')
+# print(img_test.shape)
+# print(label_test.shape)
+#
+# np.savez('images.npz', train_img = img_train, val_img = img_val, test_img = img_test)
+# np.savez('labels.npz', train_label = label_train, val_label = label_val, test_label = label_test)
+#
+#
+#
+#
+# # normalise the image data to take a value of between 0 and 1; makes computation easier
+#
+# img_train, img_val, img_test = img_train/255.0, img_val/255.0, img_test/255.0
+#
+# print(img_train[67], img_val[67], img_test[67])
+#
+# #example of an images and their labels
+# # f, axarr = plt.subplots(2,2)
+# # axarr[0,0].imshow(images[45])
+# # axarr[0,0].set_title(labels[45])
+# # axarr[0,1].imshow(images[270])
+# # axarr[0,1].set_title(labels[270])
 # axarr[1,0].imshow(images[10])
 # axarr[1,0].set_title(labels[10])
 # axarr[1,1].imshow(images[170])

@@ -20,9 +20,9 @@ class CNN_NET:
         inputShape = (w, h, d) # no dimension value: grayscale image. will add when colour images are used
 
         #32 filters of 3*3
-        model.add(Conv2D(32, (3,3), padding= "same",
-                     input_shape= inputShape))
-        model.add(Activation("relu"))
+        model.add(Conv2D(96, (3,3), padding= "same",
+                     input_shape= inputShape, activation= 'relu'))
+        #model.add(Activation("relu"))
         #batchnormalization: normalizes the activation function
         # before o/p is sent to next layer:
         # stabalizes training and reduces
@@ -33,23 +33,23 @@ class CNN_NET:
         # reduce overfitting, increase accuracy and generalisation
         model.add(Dropout(0.25))
 
-        model.add(Conv2D(64, (3,3), padding = "same"))
-        model.add(Activation("relu"))
+        model.add(Conv2D(64, (3,3), padding = "same",activation= 'relu'))
+        #model.add(Activation("relu"))
         model.add(BatchNormalization(axis=-1))
-        model.add(Conv2D(64, (3,3), padding= "same"))
-        model.add(Activation("relu"))
+        model.add(Conv2D(64, (3,3), padding= "same",activation= 'relu'))
+        #model.add(Activation("relu"))
         model.add(BatchNormalization(axis=-1))
         model.add(MaxPooling2D(pool_size=(2,2)))
         model.add(Dropout(0.25))
 
-        model.add(Conv2D(128, (3,3), padding= "same")) ## [EDIT] maybe remove a layer to reduce training time?
-        model.add(Activation("relu"))                   # might reduce accuracy, hopefully not too much
+        model.add(Conv2D(128, (3,3), padding= "same",activation= 'relu')) ## [EDIT] maybe remove a layer to reduce training time?
+        #model.add(Activation("relu"))                   # might reduce accuracy, hopefully not too much
         model.add(BatchNormalization(axis = -1))
-        model.add(Conv2D(128, (3,3), padding= "same"))
-        model.add(Activation("relu"))
+        model.add(Conv2D(128, (3,3), padding= "same",activation= 'relu'))
+        #model.add(Activation("relu"))
         model.add(BatchNormalization(axis= -1))
-        model.add(Conv2D(128, (3,3), padding= "same"))
-        model.add(Activation("relu"))
+        model.add(Conv2D(128, (3,3), padding= "same",activation= 'relu'))
+        #model.add(Activation("relu"))
         model.add(BatchNormalization(axis= -1))
         model.add(MaxPooling2D(pool_size= (2,2)))
         model.add(Dropout(0.25))
@@ -63,8 +63,8 @@ class CNN_NET:
 
         # softmax classifier
         # this does the classification
-        model.add(Dense(cls))
-        model.add(Activation("softmax"))
+        model.add(Dense(cls,activation= 'softmax'))
+        #model.add(Activation("softmax"))
 
 
 

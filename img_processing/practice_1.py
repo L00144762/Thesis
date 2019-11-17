@@ -1,33 +1,33 @@
 
 # USAGE
 # python train_simple_nn.py --dataset animals --model output/simple_nn.model --label-bin output/simple_nn_lb.pickle --plot output/simple_nn_plot.png
-
-# set the matplotlib backend so figures can be saved in the background
-import matplotlib
-matplotlib.use("Agg")
-
-# import the necessary packages
-from sklearn.preprocessing import LabelBinarizer
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
-from keras.models import Sequential
-from keras.layers.core import Dense
-from keras.optimizers import SGD
-from imutils import paths
-import matplotlib.pyplot as plt
-import numpy as np
-import argparse
-import random
-import pickle
-import cv2
-from os import listdir,makedirs
-from os.path import isfile,join,isdir
-# path = 'C:/Users/rcurran.GARTANTECH/Desktop/Aten/test_loads'
-# # path = 'C:/Users/Richard/Desktop/dissertation/test'
-# # # list of folders in image directory animals
-# image_folders = [f for f in listdir(path) if listdir(join(path, f))]
-# print(image_folders)
-# # # creates a dictionary of image folder names and assigns a label to each folder
+#
+# # set the matplotlib backend so figures can be saved in the background
+# import matplotlib
+# matplotlib.use("Agg")
+#
+# # import the necessary packages
+# from sklearn.preprocessing import LabelBinarizer
+# from sklearn.model_selection import train_test_split
+# from sklearn.metrics import classification_report
+# from keras.models import Sequential
+# from keras.layers.core import Dense
+# from keras.optimizers import SGD
+# from imutils import paths
+# import matplotlib.pyplot as plt
+# import numpy as np
+# import argparse
+# import random
+# import pickle
+# import cv2
+# from os import listdir,makedirs
+# from os.path import isfile,join,isdir
+# # path = 'C:/Users/rcurran.GARTANTECH/Desktop/Aten/test_loads'
+# # # path = 'C:/Users/Richard/Desktop/dissertation/test'
+# # # # list of folders in image directory animals
+# # image_folders = [f for f in listdir(path) if listdir(join(path, f))]
+# # print(image_folders)
+# # # # creates a dictionary of image folder names and assigns a label to each folder
 # image_labels = {image_folders[i]: i for i in range(0, len(image_folders))}
 # print(image_labels)
 #
@@ -132,9 +132,215 @@ from os.path import isfile,join,isdir
 #
 # print(x)
 # print(x.argmax(axis = 0)[1])
-c = 0
-c = c + 1
-c = 1
-for i in range(10):
-    c = c +i
-    print(c)
+# path = 'C:/Users/Richard/Desktop/dissertation/images/cat/4.jpeg'
+# x = cv2.imread(path)
+# x = cv2.cvtColor(x, cv2.COLOR_BGR2GRAY)
+# x = cv2.resize(x, (32,32))
+# x = np.array(x, dtype='float')
+# print(x.shape)
+# print(x)
+# print(x/255.0)
+
+# import the necessary packages
+from keras.models import Sequential
+from keras.layers.normalization import BatchNormalization
+from keras.layers.convolutional import Conv2D
+from keras.layers.convolutional import MaxPooling2D
+from keras.layers.core import Activation
+from keras.layers.core import Flatten
+from keras.layers.core import Dropout
+from keras.layers.core import Dense
+from keras import backend as K
+
+class CNN_NET:
+    def build(w, h, d ,cls):
+        model = Sequential()
+        inputShape = (w, h, d) # no dimension value: grayscale image. will add when colour images are used
+
+        #32 filters of 3*3
+        model.add(Conv2D(32, (3,3), padding= "same",
+                     input_shape= inputShape, activation= 'relu'))
+        #model.add(Activation("relu"))
+        #batchnormalization: normalizes the activation function
+        # before o/p is sent to next layer:
+        # stabalizes training and reduces
+        # number of epohcs to train model
+        model.add(BatchNormalization(axis= -1))# channel is the last dimension
+        model.add(MaxPooling2D(pool_size= (2,2)))
+        # dropout: disconnecting random neurons between layers
+        # reduce overfitting, increase accuracy and generalisation
+        model.add(Dropout(0.25))
+
+
+        model.add(Conv2D(64, (3,3), padding= "same",activation= 'relu'))
+        #model.add(Activation("relu"))
+        model.add(BatchNormalization(axis= -1))
+        model.add(MaxPooling2D(pool_size= (2,2)))
+        model.add(Dropout(0.25))
+
+        model.add(Conv2D(64, (3,3), padding= "same", activation= 'relu'))
+
+        #fully connected layer
+        model.add(Flatten()) # flatten the input to a 1D array
+        model.add(Dense(128)) # 512 neurons in FC layer
+        model.add(Activation("relu"))
+        model.add(BatchNormalization())
+        model.add(Dropout(0.5))
+
+        # softmax classifier
+        # this does the classification
+        model.add(Dense(cls,activation= 'softmax'))
+        #model.add(Activation("softmax"))
+
+
+
+        # return the constructed network architecure
+        return model
+
+
+
+
+class CNN_NET_3layers:
+    def build(w, h, d, cls):
+        model = Sequential()
+        inputShape = (w, h, d)  # no dimension value: grayscale image. will add when colour images are used
+
+        # 32 filters of 3*3
+        model.add(Conv2D(32, (3, 3), padding="same",
+                         input_shape=inputShape, activation='relu'))
+        # model.add(Activation("relu"))
+        # batchnormalization: normalizes the activation function
+        # before o/p is sent to next layer:
+        # stabalizes training and reduces
+        # number of epohcs to train model
+        model.add(BatchNormalization(axis=-1))  # channel is the last dimension
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        # dropout: disconnecting random neurons between layers
+        # reduce overfitting, increase accuracy and generalisation
+        model.add(Dropout(0.25))
+
+        model.add(Conv2D(64, (3, 3), padding="same", activation='relu'))
+        # model.add(Activation("relu"))
+        model.add(BatchNormalization(axis=-1))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.25))
+
+        model.add(Conv2D(96, (3, 3), padding="same", activation='relu'))
+        model.add(BatchNormalization(axis=-1))
+        model.add(MaxPooling2D(pool_size=(2,2)))
+        model.add(Dropout(0.25))
+
+        # fully connected layer
+        model.add(Flatten())  # flatten the input to a 1D array
+        model.add(Dense(128))  # 512 neurons in FC layer
+        model.add(Activation("relu"))
+        model.add(BatchNormalization())
+        model.add(Dropout(0.5))
+
+        # softmax classifier
+        # this does the classification
+        model.add(Dense(cls, activation='softmax'))
+        # model.add(Activation("softmax"))
+
+        # return the constructed network architecure
+        return model
+
+
+## removing all dropout layers; investgate the effect on train acc.
+class CNN_NET_3layers_noDO:
+    def build(w, h, d, cls):
+        model = Sequential()
+        inputShape = (w, h, d)  # no dimension value: grayscale image. will add when colour images are used
+
+        # 32 filters of 3*3
+        model.add(Conv2D(64, (3, 3), padding="same",
+                         input_shape=inputShape, activation='relu'))
+        # model.add(Activation("relu"))
+        # batchnormalization: normalizes the activation function
+        # before o/p is sent to next layer:
+        # stabalizes training and reduces
+        # number of epohcs to train model
+        model.add(BatchNormalization(axis=-1))  # channel is the last dimension
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        # dropout: disconnecting random neurons between layers
+        # reduce overfitting, increase accuracy and generalisation
+        #model.add(Dropout(0.25))
+
+        model.add(Conv2D(96, (3, 3), padding="same", activation='relu'))
+        # model.add(Activation("relu"))
+        model.add(BatchNormalization(axis=-1))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        #model.add(Dropout(0.25))
+
+        model.add(Conv2D(96, (3, 3), padding="same", activation='relu'))
+        model.add(BatchNormalization(axis=-1))
+        model.add(MaxPooling2D(pool_size=(2,2)))
+        #model.add(Dropout(0.25))
+
+        # fully connected layer
+        model.add(Flatten())  # flatten the input to a 1D array
+        model.add(Dense(128))  # 512 neurons in FC layer
+        model.add(Activation("relu"))
+        model.add(BatchNormalization())
+        #model.add(Dropout(0.5))
+
+        # softmax classifier
+        # this does the classification
+        model.add(Dense(cls, activation='softmax'))
+        # model.add(Activation("softmax"))
+
+        # return the constructed network architecure
+        return model
+
+
+## 3 layers with one dropout layer
+class CNN_NET_3layers_1DO:
+    def build(w, h, d, cls):
+        model = Sequential()
+        inputShape = (w, h, d)  # no dimension value: grayscale image. will add when colour images are used
+
+        # 32 filters of 3*3
+        model.add(Conv2D(64, (3, 3), padding="same",
+                         input_shape=inputShape))
+        model.add(Activation("relu"))
+        # batchnormalization: normalizes the activation function
+        # before o/p is sent to next layer:
+        # stabalizes training and reduces
+        # number of epohcs to train model
+        model.add(BatchNormalization(axis=-1))  # channel is the last dimension
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        # dropout: disconnecting random neurons between layers
+        # reduce overfitting, increase accuracy and generalisation
+        #model.add(Dropout(0.25))
+
+        model.add(Conv2D(96, (3, 3), padding="same"))
+        model.add(Activation("relu"))
+        model.add(BatchNormalization(axis=-1))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        #model.add(Dropout(0.25))
+
+        model.add(Conv2D(96, (3, 3), padding="same"))
+        model.add(Activation("relu"))
+        model.add(BatchNormalization(axis=-1))
+        model.add(MaxPooling2D(pool_size=(2,2)))
+        #model.add(Dropout(0.25))
+
+        model.add(Conv2D(128, (3,3)))
+        model.add(Activation("relu"))
+        model.add(BatchNormalization(axis=-1))
+        model.add(MaxPooling2D(pool_size=(2,2)))
+
+        # fully connected layer
+        model.add(Flatten())  # flatten the input to a 1D array
+        model.add(Dense(512))  # 512 neurons in FC layer
+        model.add(Activation("relu"))
+        model.add(BatchNormalization())
+        model.add(Dropout(0.5))
+
+        # softmax classifier
+        # this does the classification
+        model.add(Dense(cls, activation='softmax'))
+        # model.add(Activation("softmax"))
+
+        # return the constructed network architecure
+        return model

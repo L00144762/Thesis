@@ -4,7 +4,8 @@ import matplotlib
 # matplotlib.use("Agg")
 
 # import the necessary packages
-from pyimagesearch.cnn_build import CNN_NET
+#from pyimagesearch.cnn_build import CNN_NET
+from img_processing.practice_1 import CNN_NET_3layers_1DO
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
@@ -23,6 +24,9 @@ import os
 # x = CNN_NET
 # x = x.build(32,32, 1, cls= 4)
 # print(x.summary())
+print("-------Model summary ---------")
+CNN_NET_3layers_1DO.build(w = 32, h = 32, d = 1, cls= 3).summary()
+
 print("----- IMAGE PROCESSING: PLEASE STANDBY------")
 data = []
 labels = []
@@ -35,8 +39,8 @@ files = []
 #path = "C:/Users/rcurran.GARTANTECH/Desktop/Aten/keras-tutorial/animals"
 path = 'C:/Users/Richard/Desktop/dissertation/images1'
 #path = "C:/Users/Richard/Desktop/keras-tutorial/animals"
-fig_save = "C:/Users/Richard/Desktop/Diss_OUTPUTS/train_val_plots_2"
-model_save = "C:/Users/Richard/Desktop/Diss_OUTPUTS/CNN_bins/CNN_model_2.model"
+fig_save = "C:/Users/Richard/Desktop/Diss_OUTPUTS/train_val_plots/train_val_plots_3L_1D_LR01"
+model_save = "C:/Users/Richard/Desktop/Diss_OUTPUTS/CNN_bins/CNN_model_3layers_1DO_LR01.model"
 lb_save = "C:/Users/Richard/Desktop/Diss_OUTPUTS/label_bin_2.pickle"
 
 for folder in os.listdir(path):
@@ -55,7 +59,7 @@ for folder in os.listdir(path):
 
 # randomize the data, labels and folders
 # the folders variable is just a sanity check for labels and images
-data, labels, files = shuffle(data, labels, files, random_state = 1548)
+data, labels, files = shuffle(data, labels, files, random_state = 2334)
 
 # print(files[589])
 # print(data[589])
@@ -74,7 +78,7 @@ labels = np.array(labels)
 #print(data[589])
 # print(labels[589])
 
-trainX, testX, trainY, testY = train_test_split(data, labels, test_size= 0.25, random_state= 25)
+trainX, testX, trainY, testY = train_test_split(data, labels, test_size= 0.25, random_state= 300)
 
 #print(trainY[2])
 # making binary matrices for each label
@@ -103,15 +107,15 @@ aug = ImageDataGenerator(rotation_range= 20, width_shift_range= 0.1,
 # keeping this as an adjustable variable means more or fewer classes
 # can be trained simply by adding them to the main data directory
 
-model = CNN_NET.build(w = 32, h = 32, d =1, cls= len(lb.classes_))
-EPOCHS = 50
+model = CNN_NET_3layers_1DO.build(w = 32, h = 32, d =1, cls= len(lb.classes_))
+EPOCHS = 80
 BS = 32
-INIT_LR = 0.001
+INIT_LR = 0.01
 
 #initialize the model and optimizer
 print("-----NETWORK IS TRAINING------")
 opt = SGD(lr = INIT_LR, decay=INIT_LR/ EPOCHS) #step decay
-model.compile(loss= "categorical_crossentropy", optimizer=opt,
+model.compile(loss= "categorical_crossentropy", optimizer= opt,
               metrics=["accuracy"])
 
 H = model.fit_generator(aug.flow(trainX, trainY, batch_size= BS),
@@ -152,4 +156,9 @@ f.close()
 # then if tests good, retrain on coloured images and of smaller dataset (augmenting after BS size = 32)
 ## cnn_v1 has 6 convolutional layers
 # mention kernel size, filter size, max pooling over convolution with larger kernel to reduce spatial dimension
-# talk about padding and why it's set to same as I want the inout vol. size
+# talk about padding and why it's set to same as I want the input vol. size
+
+## sunday -  add dropout: over fit 3layer. run model again with lower learning rate and 2 dropout layers
+## add more layers for 4th class#
+
+## maybe make classses for each part for handiness
