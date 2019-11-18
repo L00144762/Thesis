@@ -1,7 +1,3 @@
-# set the matplotlib backend so figures can be saved in the background
-import matplotlib
-
-# matplotlib.use("Agg")
 
 # import the necessary packages
 #from pyimagesearch.cnn_build import CNN_NET
@@ -34,77 +30,10 @@ from os.path import  isdir, join
 import pandas as pd
 from collections import Counter
 
-
-# x = CNN_NET
-# x = x.build(32,32, 1, cls= 4)
-# print(x.summary())
-# print("-------Model summary ---------")
-# CNN_NET_3layers_1DO.build(w = 32, h = 32, d = 1, cls= 3).summary()
-
-
-print("----- IMAGE PROCESSING: PLEASE STANDBY------")
-data = []
-labels = []
-files = []
-
-# declaring the paths for imags, val/training plot, label bin. and cnn_model
-# these will then be called using command line arguments for practicality
-# will need to parse the arguments for each so they can be called
-
-
-path = 'C:/Users/rcurran.GARTANTECH/Desktop/Aten/animals'
-#path = 'C:/Users/Richard/Desktop/dissertation/images1'
-#path = "C:/Users/Richard/Desktop/keras-tutorial/animals"
-fig_save = "C:/Users/Richard/Desktop/Diss_OUTPUTS/train_val_plots/train_val_plots_3L_1D_LR01"
-model_save = "C:/Users/Richard/Desktop/Diss_OUTPUTS/CNN_bins/CNN_model_3layers_1DO_LR01.model"
-lb_save = "C:/Users/Richard/Desktop/Diss_OUTPUTS/label_bin_2.pickle"
-
-np_data_path = 'C:/Users/rcurran.GARTANTECH/PycharmProjects/Thesis/np_data'
-
-
-folders = set(listdir(path))
-folders = list(folders)
-# # creates a dictionary of image folder names and assigns a label to each folder
-image_labels = {folders[i]: i for i in range(0, len(folders))}
-
-## ------------------MAIN IMAGE PROCESSING------------------------------------------------------
-WIDTH = 100
-HEIGHT = 100
-num_classes = len(listdir(path))
-def img_proc():
-    images = []
-    labels =[]
-    clss = []
-    files =[]
-
-    for folder in listdir(path):
-        #clss.append(folder)
-        for file in listdir(path + '/' + folder):
-            if file.endswith('.jpg') or file.endswith('.jpeg') or file.endswith('.png'):
-                img = path + '/' + folder + '/' + file
-                files.append(files)
-                img = cv2.imread(img)
-                img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-                img = cv2.resize(img, (WIDTH, HEIGHT))
-                images.append(img)
-                labels.append(image_labels[folder])
-                clss.append(folder)
-
-
-    images = np.array(images, dtype= 'float32') / 255.0
-    labels = np.array(labels, dtype= 'int32')
-    #labels = to_categorical(labels, num_classes)
-
-    np.save(os.path.join(np_data_path, 'images'), images)
-    np.save(os.path.join(np_data_path, 'labels'), labels)
-    np.save(os.path.join(np_data_path, 'files'), files)
-    np.save(os.path.join(np_data_path, 'clss'), clss)
-
-
-    return images, labels, clss, files
-
-img_proc()
-
+images = np.load('np_data/images.npy')
+labels = np.load('np_data/labels.npy')
+#files = np.load('np_data/files.npy')
+clss = np.load('np_data/clss.npy')
 
 #--------- DF OF IMAGE FILES, LABELS, CLASS----------------------------------
 ## dataframe of images, their label and class

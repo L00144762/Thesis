@@ -59,7 +59,7 @@ fig_save = "C:/Users/Richard/Desktop/Diss_OUTPUTS/train_val_plots/train_val_plot
 model_save = "C:/Users/Richard/Desktop/Diss_OUTPUTS/CNN_bins/CNN_model_3layers_1DO_LR01.model"
 lb_save = "C:/Users/Richard/Desktop/Diss_OUTPUTS/label_bin_2.pickle"
 
-np_data_path = 'C:/Users/rcurran.GARTANTECH/PycharmProjects/Thesis/np_data'
+np_data_path = 'C:/Users/rcurran.GARTANTECH/PycharmProjects/Thesis/image_processing/np_data'
 
 
 folders = set(listdir(path))

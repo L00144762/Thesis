@@ -84,6 +84,7 @@ def im_proc_data():
 
 
     images, labels = shuffle(images, labels, random_state = 12551) # shuffling the data
+    list_data = list(images, labels, files)
     return(images, labels, files)
 
 images, labels, files = im_proc_data()

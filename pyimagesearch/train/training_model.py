@@ -50,7 +50,7 @@ for folder in os.listdir(path):
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             img = cv2.resize(img, (32,32))
             data.append(img)
-            labels.append(folder)
+            labels.append()
 
 
 # randomize the data, labels and folders
